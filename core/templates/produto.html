@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <title>Document</title>
+</head>
+<body>
+   <a href="{% url 'home'%}"><h2>Produto</h2></a><a href="{% url 'cadastrar_produto'%}">Cadastrar Produto</a>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Código</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Deletar</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for p in produto %}
+            <tr>
+                <th scope="row">{{p.id}}</th>
+                <td>{{p.nome}}</td>
+                <td>{{p.tipo}}</td>
+                <td>{{p.codigo}}</td>
+                <td><a href="{% url 'modificar_produto' p.id %}" class="btn btn-secondary btn-sm shadow">Editar</a></td>
+                <td><a href="#" id="teste" onclick="eliminarProduto({{p.id}})" class="btn btn-danger btn-sm shadow">Deletar</a></td>
+            </tr>
+            {% endfor %}
+            <br>
+            <button onclick="gerarPDF()">Gerar PDF</button>
+        </tbody>
+      </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha512-6HmJ9Y5PZWQVCd4KUwIaSgtDskfsykB+Fvm8Nq98GVCMHstaVoX9jqDdwSyGCbmJy5eLs/DXgDE3SXRS+2B2yA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    function eliminarProduto(id){
+        window.location.href = "/eliminar_produto/"+id
+    }
+</script>
+<script>
+    function gerarPDF(){
+        // Instancia o jsPDF
+        var doc = new jsPDF();
+
+        // Conteudo HTML que deve estar no PDF
+        doc.fromHTML('<th scope="col">ID</th>|<th scope="col">Nome</th><td>{{p.nome}}</td>|<th scope="col">Tipo</th>|<th scope="col">Código</th>|', 15, 20); // 15 é a lateral esquerda 20 é a parte superior 
+        // Gerar o PDF
+        doc.save('UNIMAR.pdf');
+    }
+</script>
+</body>
+</html>
